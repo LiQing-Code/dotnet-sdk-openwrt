@@ -45,28 +45,33 @@ get_system_architecture() {
     esac
 }
 
-# 函数：安装依赖项
 install_dependencies() {
-    echo "正在检查依赖项：jq 和 ICU"
+    echo "正在检查依赖项：jq、ICU 和 curl"
 
-    # 检查并安装 jq
-    if ! command -v jq >/dev/null 2>&1; then
-        echo "安装 jq..."
+    local update_needed=false
+    local dependencies=("jq" "icu icu-full-data" "curl")
+    local commands=("jq" "icu" "curl")
+
+    for i in "${!commands[@]}"; do
+        if ! command -v "${commands[$i]}" >/dev/null 2>&1 && ! opkg list-installed | grep -q "${commands[$i]}"; then
+            echo "${commands[$i]} 未安装，准备安装..."
+            update_needed=true
+            break
+        else
+            echo "${commands[$i]} 已安装，跳过安装步骤。"
+        fi
+    done
+
+    if [ "$update_needed" = true ]; then
+        echo "更新 opkg..."
         opkg update
-        opkg install jq
-    else
-        echo "jq 已安装，跳过安装步骤。"
+        for dep in "${dependencies[@]}"; do
+            echo "安装 $dep..."
+            opkg install $dep
+        done
     fi
 
-    # 检查并安装 ICU
-    echo "检查 ICU 是否已安装..."
-    if ! opkg list-installed | grep -q "icu"; then
-        echo "未找到 ICU，正在安装..."
-        opkg update
-        opkg install icu icu-full-data
-    else
-        echo "ICU 已安装，跳过安装步骤。"
-    fi
+    echo "依赖项检查和安装完成。"
 }
 
 # 函数：列出可用的版本并让用户选择
