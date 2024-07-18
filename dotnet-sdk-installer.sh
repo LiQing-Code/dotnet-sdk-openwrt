@@ -171,12 +171,9 @@ list_versions() {
     if ! grep -q 'export PATH="\$DOTNET_ROOT:\$PATH"' "$PROFILE_FILE"; then
         echo "export PATH=\"\$DOTNET_ROOT:\$PATH\"" >> "$PROFILE_FILE"
     fi
-
     chmod +x "$PROFILE_FILE"
-    # 加载新的环境变量配置
-    source "$PROFILE_FILE"
 
-    echo "安装完成！"
+    echo "安装完成！请执行 'source ~/.profile' 命令以加载新的环境变量，或者重新登录终端。"
 
     # 删除临时文件
     rm "$TEMP_JSON_FILE"
