@@ -45,27 +45,27 @@ get_system_architecture() {
     esac
 }
 
+# 更新并安装 .NET SDK 的相关依赖
 install_dependencies() {
-    echo "正在检查依赖项：jq、ICU 和 curl"
+    echo "正在检查依赖项：jq、ICU、curl、libopenssl 和 zlib"
 
-    local update_needed=false
-    local dependencies=("jq" "icu icu-full-data" "curl" "libopenssl")
-    local commands=("jq" "icu" "curl" "openssl")
+    dependencies="jq icu icu-full-data curl libopenssl zlib"
+    update_needed=false
 
-    for i in "${!commands[@]}"; do
-        if ! command -v "${commands[$i]}" >/dev/null 2>&1 && ! opkg list-installed | grep -q "${commands[$i]}"; then
-            echo "${commands[$i]} 未安装，准备安装..."
+    for dep in $dependencies; do
+        if ! opkg list-installed | grep -q "$dep"; then
+            echo "$dep 未安装，准备安装..."
             update_needed=true
             break
         else
-            echo "${commands[$i]} 已安装，跳过安装步骤。"
+            echo "$dep 已安装，跳过安装步骤。"
         fi
     done
 
     if [ "$update_needed" = true ]; then
         echo "更新 opkg..."
         opkg update
-        for dep in "${dependencies[@]}"; do
+        for dep in $dependencies; do
             echo "安装 $dep..."
             opkg install $dep
         done
