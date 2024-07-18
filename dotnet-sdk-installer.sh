@@ -49,8 +49,8 @@ install_dependencies() {
     echo "正在检查依赖项：jq、ICU 和 curl"
 
     local update_needed=false
-    local dependencies=("jq" "icu icu-full-data" "curl")
-    local commands=("jq" "icu" "curl")
+    local dependencies=("jq" "icu icu-full-data" "curl" "libopenssl")
+    local commands=("jq" "icu" "curl" "openssl")
 
     for i in "${!commands[@]}"; do
         if ! command -v "${commands[$i]}" >/dev/null 2>&1 && ! opkg list-installed | grep -q "${commands[$i]}"; then
