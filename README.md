@@ -19,7 +19,7 @@
    
    ```sh
    git clone https://github.com/LiQing-Code/dotnet-sdk-openwrt.git
-   cd dotnet-sdk-installer
+   cd dotnet-sdk-openwrt
    ```
 
 2. **给予执行权限**
