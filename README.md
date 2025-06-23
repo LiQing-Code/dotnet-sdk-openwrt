@@ -18,7 +18,7 @@
    克隆或下载这个仓库到您的 OpenWrt 设备上：
    
    ```sh
-   git clone https://github.com/your-username/dotnet-sdk-installer.git
+   git clone https://github.com/LiQing-Code/dotnet-sdk-openwrt.git
    cd dotnet-sdk-installer
    ```
 
